@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Langchain Streaming Agent</title>
+</head>
+
+<body>
+    <div id="chatContainer"></div>
+    <input type="text" id="messageInput" placeholder="Enter your message...">
+    <button id="sendButton">Send</button>
+
+    <script>
+        const chatContainer = document.getElementById("chatContainer");
+        const messageInput = document.getElementById("messageInput");
+        const sendButton = document.getElementById("sendButton");
+
+        const socket = new WebSocket("ws://127.0.0.1:8000/ws");
+
+        socket.onmessage = function (event) {
+            const responseText = event.data;
+            const messageElement = document.createElement("div");
+            messageElement.textContent = responseText;
+            chatContainer.appendChild(messageElement);
+        };
+
+        sendButton.addEventListener("click", sendMessage);
+
+        function sendMessage() {
+            const message = messageInput.value.trim();
+            if (message === "") {
+                return;
+            }
+
+            socket.send(message);
+
+            messageInput.value = "";
+        }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,1 @@
+conda activate tls && streamlit run run.py
